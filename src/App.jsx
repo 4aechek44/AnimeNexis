@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import Card from './components/Card'
 import SearchBar from './components/SearchBar'
 import CharacterPage from './pages/CharacterPage'
+import Header from './components/Header'
 import './App.css'
 
 function App() {
@@ -29,42 +30,33 @@ function App() {
       })
   }
 
-  // поиск через API
   const searchCharacters = (q) => {
-  setLoading(true)
+    setLoading(true)
     fetch(`https://api.jikan.moe/v4/characters?q=${q}&order_by=favorites&sort=desc&limit=25`)
-    .then(res => res.json())
-    .then(data => {
-  const sorted = data.data?.sort((a, b) => b.favorites - a.favorites) || []
-    setCharacters(sorted)
-    setHasMore(false)
-    setLoading(false)
-  })
-}
+      .then(res => res.json())
+      .then(data => {
+        const sorted = data.data?.sort((a, b) => b.favorites - a.favorites) || []
+        setCharacters(sorted)
+        setHasMore(false)
+        setLoading(false)
+      })
+  }
 
-  useEffect(() => {
-    fetchCharacters(1)
-  }, [])
+  useEffect(() => { fetchCharacters(1) }, [])
 
-  // запускаем поиск через API с задержкой
   useEffect(() => {
     if (!query) {
       fetchCharacters(1)
       pageRef.current = 1
       return
     }
-
-    const timeout = setTimeout(() => {
-      searchCharacters(query)
-    }, 500) // ждём 500мс после последней буквы
-
+    const timeout = setTimeout(() => searchCharacters(query), 500)
     return () => clearTimeout(timeout)
   }, [query])
 
   const lastElementRef = useCallback(node => {
     if (loadingMore) return
     if (observerRef.current) observerRef.current.disconnect()
-
     observerRef.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMore && !query) {
         const next = pageRef.current + 1
@@ -73,7 +65,6 @@ function App() {
         fetchCharacters(next, true)
       }
     })
-
     if (node) observerRef.current.observe(node)
   }, [loadingMore, hasMore, query])
 
@@ -82,23 +73,26 @@ function App() {
       <Routes>
         <Route path="/" element={
           <>
-            <SearchBar query={query} setQuery={setQuery} />
-            {loading ? (
-              <p className="loading">загрузка...</p>
-            ) : (
-              <>
-                <div className="card-grid">
-                  {characters.map((character, index) => (
-                    <Card
-                      key={character.mal_id}
-                      character={character}
-                      ref={index === characters.length - 1 ? lastElementRef : null}
-                    />
-                  ))}
-                </div>
-                {loadingMore && <p className="loading">загрузка...</p>}
-              </>
-            )}
+            <Header />
+            <div className="main-content">
+              <SearchBar query={query} setQuery={setQuery} />
+              {loading ? (
+                <p className="loading">loading...</p>
+              ) : (
+                <>
+                  <div className="card-grid">
+                    {characters.map((character, index) => (
+                      <Card
+                        key={character.mal_id}
+                        character={character}
+                        ref={index === characters.length - 1 ? lastElementRef : null}
+                      />
+                    ))}
+                  </div>
+                  {loadingMore && <p className="loading-more">loading more...</p>}
+                </>
+              )}
+            </div>
           </>
         } />
         <Route path="/character/:id" element={<CharacterPage />} />
