@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { jikan } from "../api/jikan";
 
 // Универсальный хук для любого Jikan-запроса
@@ -56,21 +56,44 @@ export function useAnimeSearch(query, params = {}) {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const abortControllerRef = useRef(null);
+  const isCancelledRef = useRef(false);
 
   const search = useCallback(() => {
-    if (!query.trim()) { setResults([]); return; }
-    let cancelled = false;
+    if (!query.trim()) { 
+      setResults([]); 
+      setLoading(false); // Сбрасываем loading при пустом query
+      return; 
+    }
+    // Отменяем предыдущий запрос
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+    isCancelledRef.current = false;
     setLoading(true);
-    jikan.searchAnime(query, params)
-      .then((res) => { if (!cancelled) setResults(res.data ?? []); })
-      .catch((err) => { if (!cancelled) setError(err.message); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, [query]);
+    setError(null);
+    jikan.searchAnime(query, params, { signal: abortControllerRef.current.signal })
+      .then((res) => { if (!isCancelledRef.current) setResults(res.data ?? []); })
+      .catch((err) => { 
+        if (err.name === 'AbortError') {
+          isCancelledRef.current = true;
+        } else if (!isCancelledRef.current) {
+          setError(err.message); 
+        }
+      })
+      .finally(() => { if (!isCancelledRef.current) setLoading(false); });
+  }, [query, params]);
 
   useEffect(() => {
     const timer = setTimeout(search, 400); // debounce 400ms
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      // Отменяем текущий запрос при unmount или изменении deps
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
   }, [search]);
 
   return { results, loading, error };

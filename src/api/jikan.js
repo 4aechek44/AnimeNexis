@@ -1,48 +1,12 @@
-const BASE_URL = "https://api.jikan.moe/v4";
+const BASE_URL = 'https://api.jikan.moe/v4';
 
-async function request(endpoint, params = {}) {
-  const query = new URLSearchParams(params).toString();
-  const url = `${BASE_URL}${endpoint}${query ? `?${query}` : ""}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Jikan error: ${res.status}`);
-  return res.json();
-}
-
-// Аниме
 export const jikan = {
-  // Топ аниме (популярные)
-  getTopAnime: (page = 1, filter = "bypopularity") =>
-    request("/top/anime", { page, filter }),
-
-  // Аниме в тренде (сезон)
-  getSeasonNow: (page = 1) =>
-    request("/seasons/now", { page }),
-
-  // Поиск
-  searchAnime: (q, params = {}) =>
-    request("/anime", { q, ...params }),
-
-  // Карточка тайтла
-  getAnimeById: (id) =>
-    request(`/anime/${id}`),
-
-  // Персонажи тайтла
-  getAnimeCharacters: (id) =>
-    request(`/anime/${id}/characters`),
-
-  // Страница персонажа
-  getCharacterById: (id) =>
-    request(`/characters/${id}`),
-
-  // Похожие аниме
-  getAnimeRecommendations: (id) =>
-    request(`/anime/${id}/recommendations`),
-
-  // Отзывы
-  getAnimeReviews: (id, page = 1) =>
-    request(`/anime/${id}/reviews`, { page }),
-
-  // Каталог с фильтрами
-  getAnimeList: (params = {}) =>
-    request("/anime", params),
+  getTopAnime: (page = 1) => fetch(`${BASE_URL}/top/anime?page=${page}`).then(res => res.json()),
+  getSeasonNow: (page = 1) => fetch(`${BASE_URL}/seasons/now?page=${page}`).then(res => res.json()),
+  getAnimeById: (id) => fetch(`${BASE_URL}/anime/${id}`).then(res => res.json()),
+  getAnimeCharacters: (id) => fetch(`${BASE_URL}/anime/${id}/characters`).then(res => res.json()),
+  getAnimeRecommendations: (id) => fetch(`${BASE_URL}/anime/${id}/recommendations`).then(res => res.json()),
+  getAnimeReviews: (id, page = 1) => fetch(`${BASE_URL}/anime/${id}/reviews?page=${page}`).then(res => res.json()),
+  searchAnime: (query, params = {}, options = {}) => fetch(`${BASE_URL}/anime?q=${encodeURIComponent(query)}&${new URLSearchParams(params)}`, options).then(res => res.json()),
+  getAnimeList: (params = {}) => fetch(`${BASE_URL}/anime?${new URLSearchParams(params)}`).then(res => res.json()),
 };
