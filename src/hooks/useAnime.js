@@ -6,24 +6,50 @@ function useJikan(fetcher, deps = []) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
-    fetcher()
-      .then((res) => { if (!cancelled) setData(res); })
-      .catch((err) => { if (!cancelled) setError(err.message); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
+    isMountedRef.current = true;
+    
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const result = await fetcher();
+        if (!cancelled && isMountedRef.current) {
+          setData(result);
+        }
+      } catch (err) {
+        if (!cancelled && isMountedRef.current) {
+          setError(err.message || 'Ошибка загрузки');
+        }
+      } finally {
+        if (!cancelled && isMountedRef.current) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+    
+    return () => { 
+      cancelled = true; 
+    };
   }, deps);
 
   return { data, loading, error };
 }
 
 // Топ / популярные
-export function useTopAnime(page = 1) {
-  return useJikan(() => jikan.getTopAnime(page), [page]);
+export function useTopAnime(page = 1, type = 'all') {
+  return useJikan(() => jikan.getTopAnime(page, type), [page, type]);
 }
 
 // Сезонные (тренды)
@@ -57,44 +83,64 @@ export function useAnimeSearch(query, params = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const abortControllerRef = useRef(null);
-  const isCancelledRef = useRef(false);
+  const isMountedRef = useRef(true);
+  const debounceTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const search = useCallback(() => {
     if (!query.trim()) { 
       setResults([]); 
-      setLoading(false); // Сбрасываем loading при пустом query
+      setLoading(false);
+      setError(null);
       return; 
     }
+
     // Отменяем предыдущий запрос
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
+    
     abortControllerRef.current = new AbortController();
-    isCancelledRef.current = false;
     setLoading(true);
     setError(null);
+
     jikan.searchAnime(query, params, { signal: abortControllerRef.current.signal })
-      .then((res) => { if (!isCancelledRef.current) setResults(res.data ?? []); })
-      .catch((err) => { 
-        if (err.name === 'AbortError') {
-          isCancelledRef.current = true;
-        } else if (!isCancelledRef.current) {
-          setError(err.message); 
+      .then((res) => { 
+        if (isMountedRef.current) {
+          setResults(res.data ?? []);
         }
       })
-      .finally(() => { if (!isCancelledRef.current) setLoading(false); });
+      .catch((err) => { 
+        if (isMountedRef.current && err.name !== 'AbortError') {
+          setError(err.message || 'Ошибка поиска');
+        }
+      })
+      .finally(() => { 
+        if (isMountedRef.current) {
+          setLoading(false);
+        }
+      });
   }, [query, params]);
 
   useEffect(() => {
-    const timer = setTimeout(search, 400); // debounce 400ms
+    // Очищаем предыдущий таймер
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    debounceTimerRef.current = setTimeout(search, 500); // Увеличил debounce до 500ms
+
     return () => {
-      clearTimeout(timer);
-      // Отменяем текущий запрос при unmount или изменении deps
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [search]);
+  }, [query, search]);
 
   return { results, loading, error };
 }
