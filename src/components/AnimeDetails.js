@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAnimeById, useAnimeCharacters, useAnimeRecommendations, useAnimeReviews } from '../hooks/useAnime';
 import { useAnimeContext } from '../hooks/useAnimeContext';
@@ -12,13 +12,16 @@ function AnimeDetails() {
   const { data: reviewsData } = useAnimeReviews(id);
   const { isFavorite, isInWatchlist, toggleFavorite, toggleWatchlist } = useAnimeContext();
 
+  // Мемоизация обработанных данных
+  const processedData = useMemo(() => ({
+    characters: charactersData?.data || [],
+    recommendations: recommendationsData?.data || [],
+    reviews: reviewsData?.data || [],
+  }), [charactersData, recommendationsData, reviewsData]);
+
   if (loading) return <div className="loading-page">Загрузка...</div>;
   if (error) return <div className="error-page">Ошибка: {error}</div>;
   if (!anime) return <div className="error-page">Аниме не найдено</div>;
-
-  const characters = charactersData?.data || [];
-  const recommendations = recommendationsData?.data || [];
-  const reviews = reviewsData?.data || [];
 
   return (
     <div className="anime-details">
@@ -138,11 +141,11 @@ function AnimeDetails() {
           </section>
         )}
 
-        {characters.length > 0 && (
+        {processedData.characters.length > 0 && (
           <section className="section">
-            <h2>Персонажи ({characters.length})</h2>
+            <h2>Персонажи ({processedData.characters.length})</h2>
             <div className="characters-grid">
-              {characters.slice(0, 6).map(char => (
+              {processedData.characters.slice(0, 6).map(char => (
                 <div key={char.character.mal_id} className="character-card">
                   <img src={char.character.images?.jpg?.image_url} alt={char.character.name} />
                   <div className="character-info">
@@ -155,11 +158,11 @@ function AnimeDetails() {
           </section>
         )}
 
-        {recommendations.length > 0 && (
+        {processedData.recommendations.length > 0 && (
           <section className="section">
             <h2>Рекомендации</h2>
             <div className="recommendations-grid">
-              {recommendations.slice(0, 6).map(rec => (
+              {processedData.recommendations.slice(0, 6).map(rec => (
                 <Link 
                   key={rec.entry.mal_id} 
                   to={`/anime/${rec.entry.mal_id}`}
@@ -173,11 +176,11 @@ function AnimeDetails() {
           </section>
         )}
 
-        {reviews.length > 0 && (
+        {processedData.reviews.length > 0 && (
           <section className="section">
-            <h2>Отзывы ({reviews.length})</h2>
+            <h2>Отзывы ({processedData.reviews.length})</h2>
             <div className="reviews">
-              {reviews.slice(0, 3).map(review => (
+              {processedData.reviews.slice(0, 3).map(review => (
                 <div key={review.mal_id} className="review-item">
                   <div className="review-header">
                     <span className="review-author">{review.user.username}</span>
