@@ -73,8 +73,13 @@ const fetchWithCache = async (endpoint, params = {}, options = {}, attempt = 1) 
 };
 
 export const jikan = {
-  getTopAnime: (page = 1, type = 'all') => 
-    fetchWithCache('/top/anime', { page, type, limit: 25 }),
+  getTopAnime: (page = 1, type = 'all') => {
+    const params = { page, limit: 25 };
+    if (type !== 'all') {
+      params.type = type;
+    }
+    return fetchWithCache('/top/anime', params);
+  },
   
   getSeasonNow: (page = 1) => 
     fetchWithCache('/seasons/now', { page, limit: 25 }),

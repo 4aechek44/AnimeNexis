@@ -111,6 +111,38 @@ function AnimeDetails() {
                 <span className="value">{anime.source}</span>
               </div>
             )}
+
+            {/* External Site Ratings as Meta Item */}
+            <div className="meta-item" style={{ gridColumn: '1 / -1' }}>
+              <span className="label">Оценки на сайтах:</span>
+              <div className="ratings-values">
+                {anime.score && (
+                  <a href={anime.url} target="_blank" rel="noopener noreferrer" className="rating-value-link">
+                    MyAnimeList: {anime.score}/10
+                  </a>
+                )}
+                {anime.external?.slice(0, 2).map((ext) => {
+                  let displayName = ext.name;
+                  if (ext.name.includes('IMDB') || ext.name.includes('IMDb')) {
+                    displayName = 'IMDB';
+                  } else if (ext.name.includes('AniDB')) {
+                    displayName = 'AniDB';
+                  }
+                  
+                  return (
+                    <a 
+                      key={ext.name}
+                      href={ext.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rating-value-link"
+                    >
+                      {displayName} ↗
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
           {/* Genres and Themes */}
