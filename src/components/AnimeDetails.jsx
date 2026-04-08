@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAnimeById, useAnimeCharacters, useAnimeRecommendations, useAnimeReviews } from '../hooks/useAnime';
 import { useAnimeContext } from '../hooks/useAnimeContext';
@@ -197,4 +197,4 @@ function AnimeDetails() {
   );
 }
 
-export default AnimeDetails;
+export default memo(AnimeDetails);

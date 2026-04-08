@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { useAnimeContext } from '../hooks/useAnimeContext';
 import AnimeCard from './AnimeCard';
 import './Watchlist.css';
@@ -6,7 +6,9 @@ import './Watchlist.css';
 function Watchlist() {
   const { watchlist } = useAnimeContext();
 
-  if (watchlist.length === 0) {
+  const watchlistItems = useMemo(() => watchlist, [watchlist]);
+
+  if (watchlistItems.length === 0) {
     return (
       <div className="empty-state">
         <h1>К просмотру</h1>
@@ -18,9 +20,9 @@ function Watchlist() {
 
   return (
     <div className="watchlist">
-      <h1>К просмотру ({watchlist.length})</h1>
+      <h1>К просмотру ({watchlistItems.length})</h1>
       <div className="anime-grid">
-        {watchlist.map((anime) => (
+        {watchlistItems.map((anime) => (
           <AnimeCard key={anime.mal_id} anime={anime} />
         ))}
       </div>
@@ -28,4 +30,4 @@ function Watchlist() {
   );
 }
 
-export default Watchlist;
+export default memo(Watchlist);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import AnimeCard from './AnimeCard';
 import { useAnimeSearch } from '../hooks/useAnime';
@@ -15,9 +15,9 @@ function Search() {
     }
   }, [query, setSearchParams]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = useCallback((e) => {
     setQuery(e.target.value);
-  };
+  }, []);
 
   return (
     <div className="search">
@@ -61,4 +61,4 @@ function Search() {
   );
 }
 
-export default Search;
+export default memo(Search);

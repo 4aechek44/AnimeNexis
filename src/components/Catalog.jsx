@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, memo, useCallback } from 'react';
 import AnimeCard from './AnimeCard';
 import { useAnimeCatalog } from '../hooks/useAnime';
 import './Catalog.css';
@@ -12,22 +12,22 @@ function Catalog() {
   });
   const { data, loading, error } = useAnimeCatalog({ ...filters, page, limit: 25 });
 
-  const handleFilterChange = (key, value) => {
-    setFilters({ ...filters, [key]: value });
+  const handleFilterChange = useCallback((key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
     setPage(1);
-  };
+  }, []);
 
-  const handleNextPage = () => {
+  const handleNextPage = useCallback(() => {
     setPage(page + 1);
     window.scrollTo(0, 0);
-  };
+  }, [page]);
 
-  const handlePrevPage = () => {
+  const handlePrevPage = useCallback(() => {
     if (page > 1) {
       setPage(page - 1);
       window.scrollTo(0, 0);
     }
-  };
+  }, [page]);
 
   const anime = data?.data || [];
   const pagination = data?.pagination || {};
@@ -103,4 +103,4 @@ function Catalog() {
   );
 }
 
-export default Catalog;
+export default memo(Catalog);

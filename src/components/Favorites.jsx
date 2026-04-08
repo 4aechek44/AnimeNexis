@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { useAnimeContext } from '../hooks/useAnimeContext';
 import AnimeCard from './AnimeCard';
 import './Favorites.css';
@@ -6,7 +6,9 @@ import './Favorites.css';
 function Favorites() {
   const { favorites } = useAnimeContext();
 
-  if (favorites.length === 0) {
+  const favoritesList = useMemo(() => favorites, [favorites]);
+
+  if (favoritesList.length === 0) {
     return (
       <div className="empty-state">
         <h1>Избранное</h1>
@@ -18,9 +20,9 @@ function Favorites() {
 
   return (
     <div className="favorites">
-      <h1>Избранное ({favorites.length})</h1>
+      <h1>Избранное ({favoritesList.length})</h1>
       <div className="anime-grid">
-        {favorites.map((anime) => (
+        {favoritesList.map((anime) => (
           <AnimeCard key={anime.mal_id} anime={anime} />
         ))}
       </div>
@@ -28,4 +30,4 @@ function Favorites() {
   );
 }
 
-export default Favorites;
+export default memo(Favorites);

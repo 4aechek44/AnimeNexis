@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAnimeContext } from '../hooks/useAnimeContext';
 import './Navigation.css';
@@ -48,4 +48,4 @@ function Navigation() {
   );
 }
 
-export default Navigation;
+export default memo(Navigation);

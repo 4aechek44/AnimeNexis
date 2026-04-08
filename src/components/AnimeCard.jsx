@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAnimeContext } from '../hooks/useAnimeContext';
 import './AnimeCard.css';
@@ -19,7 +19,7 @@ function AnimeCard({ anime }) {
   return (
     <Link to={`/anime/${anime.mal_id}`} className="anime-card">
       <div className="anime-card-image">
-        <img src={anime.images?.jpg?.image_url} alt={anime.title} />
+        <img src={anime.images?.jpg?.image_url} alt={anime.title} loading="lazy" />
         <div className="anime-card-overlay">
           <button className={`btn-favorite ${isFavorite(anime.mal_id) ? 'active' : ''}`} onClick={handleFavoriteClick}>
             ♥
@@ -39,4 +39,4 @@ function AnimeCard({ anime }) {
   );
 }
 
-export default AnimeCard;
+export default memo(AnimeCard);

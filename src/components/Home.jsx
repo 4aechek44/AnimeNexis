@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, memo } from 'react';
 import AnimeCard from './AnimeCard';
 import { useTopAnime, useSeasonNow } from '../hooks/useAnime';
 import './Home.css';
@@ -7,6 +7,9 @@ function Home() {
   const [topType, setTopType] = useState('all');
   const { data: topAnime, loading: topLoading } = useTopAnime(1, topType);
   const { data: seasonAnime, loading: seasonLoading } = useSeasonNow(1);
+
+  const topAnimeSliced = useMemo(() => topAnime?.data?.slice(0, 12) || [], [topAnime?.data]);
+  const seasonAnimeSliced = useMemo(() => seasonAnime?.data?.slice(0, 12) || [], [seasonAnime?.data]);
 
   return (
     <div className="home">
@@ -34,7 +37,7 @@ function Home() {
           {topLoading ? (
             <p className="loading">Загрузка...</p>
           ) : (
-            topAnime?.data?.slice(0, 12).map((anime) => (
+            topAnimeSliced.map((anime) => (
               <AnimeCard key={anime.mal_id} anime={anime} />
             ))
           )}
@@ -47,7 +50,7 @@ function Home() {
           {seasonLoading ? (
             <p className="loading">Загрузка...</p>
           ) : (
-            seasonAnime?.data?.slice(0, 12).map((anime) => (
+            seasonAnimeSliced.map((anime) => (
               <AnimeCard key={anime.mal_id} anime={anime} />
             ))
           )}
@@ -57,4 +60,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default memo(Home);
