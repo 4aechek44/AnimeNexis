@@ -36,7 +36,7 @@ function Navigation() {
         <div className="navbar-menu">
           <Link to="/catalog" className="nav-link">Каталог</Link>
           <Link to="/favorites" className="nav-link">Избранное ({favorites.length})</Link>
-          <Link to="/watchlist" className="nav-link">К просмотру ({watchlist.length})</Link>
+          <Link to="/watchlist" className="nav-link">Просмотренно ({watchlist.length})</Link>
           <Link to="/plans" className="nav-link">В планах ({plans.length})</Link>
         </div>
       </div>
