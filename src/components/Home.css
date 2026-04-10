@@ -8,7 +8,7 @@
   padding: 60px 20px;
   text-align: center;
   margin-bottom: 40px;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .hero h1 {
@@ -19,41 +19,49 @@
 .hero p {
   font-size: 20px;
   margin: 0;
+  opacity: 0.85;
 }
 
 .section {
   margin-bottom: 60px;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .section h2 {
-  font-size: 32px;
-  margin: 0;
+  font-size: 28px;
+  margin: 0 0 24px 0;
+  font-weight: 600;
 }
 
 .filter-buttons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .filter-btn {
-  padding: 8px 16px;
-  border: 2px solid #ddd;
+  padding: 6px 16px;
+  border: 1.5px solid #ddd;
   background: white;
   border-radius: 20px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s;
   font-weight: 500;
+  font-size: 14px;
 }
 
 .filter-btn:hover {
   border-color: #667eea;
+  color: #667eea;
 }
 
 .filter-btn.active {
@@ -70,9 +78,34 @@
 
 .loading {
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
   color: #999;
   padding: 40px;
+  grid-column: 1 / -1;
+}
+
+.load-more-btn {
+  display: block;
+  margin: 28px auto 0;
+  padding: 10px 32px;
+  background: white;
+  border: 1.5px solid #667eea;
+  color: #667eea;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.load-more-btn:hover {
+  background: #667eea;
+  color: white;
+}
+
+.load-more-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {
@@ -80,13 +113,14 @@
     font-size: 32px;
   }
 
+  .section {
+    padding: 20px;
+  }
+
   .section-header {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .filter-buttons {
-    margin-top: 15px;
+    gap: 12px;
   }
 
   .anime-grid {

@@ -15,6 +15,7 @@ function Navigation() {
       setSearchQuery('');
     }
   };
+  
 
   return (
     <nav className="navbar">
