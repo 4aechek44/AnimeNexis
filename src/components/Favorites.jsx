@@ -12,7 +12,7 @@ function Favorites() {
       <div className="empty-state">
         <h1>Избранное</h1>
         <p>У вас нет избранных аниме</p>
-        <p className="subtitle">Добавьте аниме в избранное, нажав на ❤️ на карточке</p>
+        <p className="subtitle">Добавьте аниме в избранное, нажав на 🤍 на карточке</p>
       </div>
     );
   }

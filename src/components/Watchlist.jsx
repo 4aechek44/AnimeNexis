@@ -12,7 +12,7 @@ function Watchlist() {
       <div className="empty-state">
         <h1>К просмотру</h1>
         <p>Ваш список пуст</p>
-        <p className="subtitle">Добавьте аниме в список, нажав на + на карточке</p>
+        <p className="subtitle">Добавьте аниме в список, нажав на 👁️ на карточке</p>
       </div>
     );
   }

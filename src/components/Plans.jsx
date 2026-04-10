@@ -12,7 +12,7 @@ function Plans() {
       <div className="empty-state">
         <h1>Планы на аниме</h1>
         <p>У вас нет планов на аниме</p>
-        <p className="subtitle">Добавьте аниме в планы, нажав на 📅 на карточке</p>
+        <p className="subtitle">Добавьте аниме в планы, нажав на 🕑 на карточке</p>
       </div>
     );
   }
