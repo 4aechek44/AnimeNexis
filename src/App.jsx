@@ -11,6 +11,7 @@ const Search = lazy(() => import('./components/Search'));
 const Catalog = lazy(() => import('./components/Catalog'));
 const Favorites = lazy(() => import('./components/Favorites'));
 const Watchlist = lazy(() => import('./components/Watchlist'));
+const Plans = lazy(() => import('./components/Plans'));
 
 const LoadingFallback = () => (
   <div className="loading-fallback">
@@ -32,6 +33,7 @@ function App() {
               <Route path="/catalog" element={<Catalog />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/watchlist" element={<Watchlist />} />
+              <Route path="/plans" element={<Plans />} />
             </Routes>
           </Suspense>
         </main>

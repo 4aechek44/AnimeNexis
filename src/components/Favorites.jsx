@@ -5,7 +5,6 @@ import './Favorites.css';
 
 function Favorites() {
   const { favorites } = useAnimeContext();
-
   const favoritesList = useMemo(() => favorites, [favorites]);
 
   if (favoritesList.length === 0) {

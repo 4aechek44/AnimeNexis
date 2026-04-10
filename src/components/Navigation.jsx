@@ -6,7 +6,7 @@ import './Navigation.css';
 function Navigation() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-  const { favorites, watchlist } = useAnimeContext();
+  const { favorites, watchlist, plans } = useAnimeContext();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -34,14 +34,10 @@ function Navigation() {
         </form>
 
         <div className="navbar-menu">
-          <Link to="/" className="nav-link">Главная</Link>
           <Link to="/catalog" className="nav-link">Каталог</Link>
-          <Link to="/favorites" className="nav-link">
-            Избранное ({favorites.length})
-          </Link>
-          <Link to="/watchlist" className="nav-link">
-            К просмотру ({watchlist.length})
-          </Link>
+          <Link to="/favorites" className="nav-link">Избранное ({favorites.length})</Link>
+          <Link to="/watchlist" className="nav-link">К просмотру ({watchlist.length})</Link>
+          <Link to="/plans" className="nav-link">В планах ({plans.length})</Link>
         </div>
       </div>
     </nav>

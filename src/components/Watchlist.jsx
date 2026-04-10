@@ -5,7 +5,6 @@ import './Watchlist.css';
 
 function Watchlist() {
   const { watchlist } = useAnimeContext();
-
   const watchlistItems = useMemo(() => watchlist, [watchlist]);
 
   if (watchlistItems.length === 0) {
