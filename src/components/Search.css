@@ -43,6 +43,23 @@
   margin-bottom: 20px;
 }
 
+.error-message {
+  margin-bottom: 20px;
+}
+
+.error-message .error {
+  margin: 0 0 10px 0;
+}
+
+.error-hint {
+  color: #666;
+  font-size: 14px;
+  padding: 10px 15px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  margin: 0;
+}
+
 .loading {
   text-align: center;
   font-size: 18px;

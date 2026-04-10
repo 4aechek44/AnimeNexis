@@ -77,70 +77,73 @@ export function useAnimeReviews(id, page = 1) {
   return useJikan(() => jikan.getAnimeReviews(id, page), [id, page]);
 }
 
-// Поиск с debounce
-export function useAnimeSearch(query, params = {}) {
+// Простой поиск аниме с debounce
+export function useAnimeSearch(query) {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const abortControllerRef = useRef(null);
-  const isMountedRef = useRef(true);
-  const debounceTimerRef = useRef(null);
+  const debounceRef = useRef(null);
 
   useEffect(() => {
+    // Очищаем таймер когда unmount
     return () => {
-      isMountedRef.current = false;
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
     };
   }, []);
 
-  const search = useCallback(() => {
-    if (!query.trim()) { 
-      setResults([]); 
+  useEffect(() => {
+    // Очищаем старый таймер
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    // Если пусто - очищаем результаты
+    if (!query.trim()) {
+      setResults([]);
       setLoading(false);
       setError(null);
-      return; 
+      return;
     }
 
-    // Отменяем предыдущий запрос
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
+    // Нужно минимум 2 символа
+    if (query.trim().length < 2) {
+      setResults([]);
+      setLoading(false);
+      return;
     }
-    
-    abortControllerRef.current = new AbortController();
-    setLoading(true);
-    setError(null);
 
-    jikan.searchAnime(query, params, { signal: abortControllerRef.current.signal })
-      .then((res) => { 
-        if (isMountedRef.current) {
-          setResults(res.data ?? []);
-        }
-      })
-      .catch((err) => { 
-        if (isMountedRef.current && err.name !== 'AbortError') {
-          setError(err.message || 'Ошибка поиска');
-        }
-      })
-      .finally(() => { 
-        if (isMountedRef.current) {
+    // Ставим debounce 500ms
+    debounceRef.current = setTimeout(() => {
+      setLoading(true);
+      setError(null);
+
+      jikan.searchAnime(query)
+        .then((res) => {
+          let data = res.data || [];
+          
+          // Фильтруем хентай (rating Rx)
+          data = data.filter(anime => {
+            const rating = anime.rating || '';
+            return !rating.includes('Rx') && !rating.includes('hentai');
+          });
+          
+          // Сортируем по рейтингу
+          const sorted = data.sort((a, b) => (b.score || 0) - (a.score || 0));
+          setResults(sorted);
+        })
+        .catch((err) => {
+          if (err.name !== 'AbortError') {
+            setError(err.message || 'Ошибка поиска');
+            setResults([]);
+          }
+        })
+        .finally(() => {
           setLoading(false);
-        }
-      });
-  }, [query, params]);
-
-  useEffect(() => {
-    // Очищаем предыдущий таймер
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
-
-    debounceTimerRef.current = setTimeout(search, 500); // Увеличил debounce до 500ms
-
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-    };
-  }, [query, search]);
+        });
+    }, 500);
+  }, [query]);
 
   return { results, loading, error };
 }

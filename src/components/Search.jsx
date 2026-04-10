@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import AnimeCard from './AnimeCard';
 import { useAnimeSearch } from '../hooks/useAnime';
@@ -9,15 +9,15 @@ function Search() {
   const [query, setQuery] = useState(searchParams.get('q') || '');
   const { results, loading, error } = useAnimeSearch(query);
 
-  useEffect(() => {
-    if (query) {
-      setSearchParams({ q: query });
+  const handleInputChange = (e) => {
+    const newQuery = e.target.value;
+    setQuery(newQuery);
+    if (newQuery) {
+      setSearchParams({ q: newQuery });
+    } else {
+      setSearchParams({});
     }
-  }, [query, setSearchParams]);
-
-  const handleInputChange = useCallback((e) => {
-    setQuery(e.target.value);
-  }, []);
+  };
 
   return (
     <div className="search">
@@ -33,11 +33,19 @@ function Search() {
         />
       </div>
 
-      {error && <p className="error">Ошибка: {error}</p>}
+      {error && (
+        <div className="error-message">
+          <p className="error">⚠️ Ошибка: {error}</p>
+        </div>
+      )}
 
-      {loading && query && <p className="loading">Загрузка результатов...</p>}
+      {loading && <p className="loading">Загрузка результатов...</p>}
 
-      {query && results.length === 0 && !loading && (
+      {!query && !loading && (
+        <p className="search-hint">Введите название аниме для поиска...</p>
+      )}
+
+      {query && !loading && results.length === 0 && !error && (
         <p className="no-results">По запросу "{query}" ничего не найдено</p>
       )}
 
@@ -51,14 +59,8 @@ function Search() {
           </div>
         </div>
       )}
-
-      {!query && (
-        <div className="search-hint">
-          <p>Начните ввод для поиска аниме...</p>
-        </div>
-      )}
     </div>
   );
 }
 
-export default memo(Search);
+export default Search;

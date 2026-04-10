@@ -1,7 +1,11 @@
 const BASE_URL = 'https://api.jikan.moe/v4';
 const CACHE = new Map();
-const CACHE_DURATION = 10 * 60 * 1000; // 10 минут
-const MAX_CACHE_SIZE = 100; // Максимальный размер кеша
+const CACHE_DURATION = 60 * 60 * 1000; // 60 минут кеша - очень долго
+const MAX_CACHE_SIZE = 150;
+
+// Rate limiter для избежания перегрузки API
+let lastRequestTime = 0;
+const MIN_REQUEST_INTERVAL = 800; // 800ms между запросами
 
 const getCacheKey = (endpoint, params) => `${endpoint}:${JSON.stringify(params)}`;
 
@@ -24,20 +28,34 @@ const fetchWithCache = async (endpoint, params = {}, options = {}, attempt = 1) 
   }
 
   try {
+    // Rate limiting - ждем минимальный интервал между запросами
+    const now = Date.now();
+    const timeSinceLastRequest = now - lastRequestTime;
+    if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
+      const waitTime = MIN_REQUEST_INTERVAL - timeSinceLastRequest;
+      await delay(waitTime);
+    }
+    lastRequestTime = Date.now();
+
     const query = new URLSearchParams(params).toString();
     const url = query ? `${BASE_URL}${endpoint}?${query}` : `${BASE_URL}${endpoint}`;
     
-    // Добавляем небольшую задержку для избежания rate limiting
+    // Добавляем небольшую задержку для избежания rate limiting при retry
     if (attempt > 1) {
       await delay(1000 * (attempt - 1));
     }
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    // Используем переданный signal если есть, иначе создаем свой
+    const controller = options.signal ? null : new AbortController();
+    const signal = options.signal || controller?.signal;
+    
+    const timeoutId = setTimeout(() => {
+      if (controller) controller.abort();
+    }, 8000);
 
     const response = await fetch(url, { 
       ...options, 
-      signal: controller.signal 
+      signal 
     });
     
     clearTimeout(timeoutId);
@@ -61,13 +79,17 @@ const fetchWithCache = async (endpoint, params = {}, options = {}, attempt = 1) 
     return data;
   } catch (error) {
     if (error.name === 'AbortError') {
-      throw new Error('Превышено время ожидания');
+      console.warn('Request aborted');
+      throw new Error('Запрос отменен');
     }
     console.error('Fetch error:', error);
+    
     // Если есть кеш, верните его даже если истек
     if (CACHE.has(cacheKey)) {
+      console.log('Returning stale cache for:', cacheKey);
       return CACHE.get(cacheKey).data;
     }
+    
     throw error;
   }
 };
