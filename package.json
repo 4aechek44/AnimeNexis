@@ -17,8 +17,4 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  
-  {
-  "homepage": "https://4aechek44.github.io/AnimeNexis/"
-  }
 }
