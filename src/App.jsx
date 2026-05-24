@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimeProvider } from './context/AnimeContext';
 import Navigation from './components/Navigation';
 import Home from './components/Home';
