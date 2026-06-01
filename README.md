@@ -1,141 +1,103 @@
-# AnimeNexis
+<div align="center">
 
-AnimeNexis is a React anime discovery app built with Vite. The app uses the
-Jikan API to show top anime, seasonal releases, catalog filters, search results,
-anime details, and personal lists stored in the browser.
+# 🎌 AnimeNexis
+
+**Anime discovery platform powered by Jikan API**
+
+🌐 **Live Demo:** https://4aechek44.github.io/AnimeNexis/
+
+[![React](https://img.shields.io/badge/React_18-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![React Router](https://img.shields.io/badge/React_Router-CA4245?style=flat-square&logo=reactrouter&logoColor=white)](https://reactrouter.com/)
+[![Jikan API](https://img.shields.io/badge/Jikan_API-2C3E50?style=flat-square)](https://jikan.moe/)
+[![CSS Modules](https://img.shields.io/badge/CSS_Modules-000000?style=flat-square&logo=cssmodules&logoColor=white)](https://github.com/css-modules/css-modules)
+
+</div>
+
+---
+
+## About
+
+AnimeNexis is a React application for discovering anime using the Jikan API.
+
+Browse top-rated shows, explore seasonal releases, search titles, filter the catalog, view detailed information, and maintain your own anime lists directly in the browser.
+
+<!-- Add screenshot here -->
+<!-- ![Preview](images/preview.png) -->
+
+---
 
 ## Features
 
-- Home page with top anime and current seasonal releases
-- Anime search by title
-- Catalog page with type, status, and rating filters
-- Anime details pages
-- Favorites, watched list, and planned list
-- Local browser storage for personal lists
-- Client-side routing with `react-router-dom`
-- GitHub Pages deployment support
+- 🔥 Top-rated anime ranking
+- 🌸 Current seasonal anime
+- 🔍 Search by title
+- 📚 Catalog with filters and pagination
+- 📄 Detailed anime pages
+- ❤️ Favorites list
+- ✅ Watched list
+- 📌 Planned list
+- 💾 Local storage persistence
+- 🚀 GitHub Pages deployment
 
-## Tech Stack
+---
 
-- React 18
-- Vite
-- React Router
-- Jikan API
-- CSS modules by component files
+## Stack
+
+| Technology | Purpose |
+|------------|---------|
+| React 18 | UI development |
+| Vite | Build tool and development server |
+| React Router | Client-side routing |
+| Jikan API | Anime data source |
+| CSS Modules | Component styling |
+
+---
 
 ## Getting Started
 
-Install Node.js first. The recommended option is the current LTS version from
-[nodejs.org](https://nodejs.org/).
-
-Check that Node.js and npm are available:
-
-```bash
-node --version
-npm --version
-```
-
-On Windows, if these commands are not found, install Node.js LTS and reopen the
-terminal. You can install it from the website above or with:
-
-```bash
-winget install OpenJS.NodeJS.LTS
-```
-
-Clone the repository and install dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Start the development server:
+Run development server:
 
 ```bash
 npm run dev
 ```
 
-Vite will print a local URL in the terminal, usually:
-
-```text
-http://localhost:5173/AnimeNexis/
-```
-
-Open that URL in your browser to test the interface. If Vite shows a different
-port, use the URL from the terminal.
-
-## Testing the Interface Locally
-
-While the dev server is running, edit files inside `src/`. Vite reloads the page
-automatically after most changes.
-
-Useful places to start:
-
-- `src/App.jsx` - routes and page layout
-- `src/components/Navigation.jsx` - top navigation and search bar
-- `src/components/Home.jsx` - main page content
-- `src/components/Catalog.jsx` - catalog filters and pagination
-- `src/components/AnimeCard.jsx` - anime card UI
-- `src/components/*.css` - component styles
-
-If the page is open but data does not load, check:
-
-- The browser has internet access
-- The Jikan API is available
-- The browser console does not show request errors or rate-limit errors
-
-## Troubleshooting
-
-### `npm` is not recognized
-
-Node.js is not installed or the terminal does not see it yet. Install Node.js LTS,
-then close and reopen the terminal.
-
-### Port `5173` is already busy
-
-Vite will automatically choose another port. Open the URL printed in the
-terminal.
-
-### GitHub Pages route opens a blank page
-
-This project uses `HashRouter`, so deployed routes include `#/` in the URL. This
-helps GitHub Pages serve client-side routes correctly.
-
-## Build
-
-Create a production build:
+Build for production:
 
 ```bash
 npm run build
 ```
 
-Preview the production build locally:
-
-```bash
-npm run preview
-```
-
-## Deploy
-
-The project is configured for GitHub Pages:
+Deploy to GitHub Pages:
 
 ```bash
 npm run deploy
 ```
 
-The configured homepage is:
-
-```text
-https://4aechek44.github.io/AnimeNexis/
-```
+---
 
 ## Project Structure
 
 ```text
-public/              Static assets
-src/api/             Jikan API client
-src/components/      React pages and UI components
-src/context/         Shared anime list state
-src/hooks/           Reusable data and context hooks
-src/App.jsx          App routes
-src/main.jsx         React entry point
+src/
+├── api/            # Jikan API client
+├── components/     # Pages and UI components
+├── context/        # Global state
+├── hooks/          # Custom hooks
+├── App.jsx         # Routes
+└── main.jsx        # Entry point
 ```
+
+---
+
+<div align="center">
+
+Made by [4aechek44](https://github.com/4aechek44)
+
+</div>
