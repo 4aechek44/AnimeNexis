@@ -22,8 +22,7 @@ AnimeNexis is a React application for discovering anime using the Jikan API.
 
 Browse top-rated shows, explore seasonal releases, search titles, filter the catalog, view detailed information, and maintain your own anime lists directly in the browser.
 
-<!-- Add screenshot here -->
-<!-- ![Preview](images/preview.png) -->
+![Photo](public/images/readme-img.png)
 
 ---
 
