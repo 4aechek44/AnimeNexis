@@ -20,10 +20,10 @@ function AnimeDetails() {
     recommendations: recommendationsData?.data?.data || recommendationsData?.data || [],
     reviews: reviewsData?.data?.data || reviewsData?.data || [],
   }), [charactersData, recommendationsData, reviewsData]);
-
-  if (loading) return <div className="loading-page">⌛ Загрузка информации об аниме...</div>;
-  if (error) return <div className="error-page">❌ Ошибка: {error}</div>;
-  if (!anime) return <div className="error-page">🔍 Аниме не найдено</div>;
+  
+  if (loading) return <div className="loading-page">⌛ Loading anime information...</div>;
+  if (error) return <div className="error-page">❌ Error: {error}</div>;
+  if (!anime) return <div className="error-page">🔍 Anime not found</div>;
 
   const scorePercentage = (anime.score / 10) * 100;
 
@@ -74,47 +74,47 @@ function AnimeDetails() {
           {/* Main Meta */}
           <div className="details-meta">
             <div className="meta-item">
-              <span className="label">Тип: </span>
+              <span className="label">Type: </span>
               <span className="value">{anime.type || 'Unknown'}</span>
             </div>
             <div className="meta-item">
-              <span className="label">Эпизодов: </span>
+              <span className="label">Episodes: </span>
               <span className="value">{anime.episodes || 'TBA'}</span>
             </div>
             <div className="meta-item">
-              <span className="label">Статус: </span>
+              <span className="label">Status: </span>
               <span className={`value status-${anime.status?.toLowerCase().replace(/\s+/g, '-')}`}>
                 {anime.status || 'Unknown'}
               </span>
             </div>
             <div className="meta-item">
-              <span className="label">Эфир: </span>
+              <span className="label">Airing: </span>
               <span className="value">{anime.aired?.string || 'Unknown'}</span>
             </div>
             <div className="meta-item">
-              <span className="label">Рейтинг MAL: </span>
+              <span className="label">MAL Rating: </span>
               <span className="value">#{anime.rank || 'N/A'}</span>
             </div>
             <div className="meta-item">
-              <span className="label">Популярность: </span>
+              <span className="label">Popularity: </span>
               <span className="value">#{anime.popularity || 'N/A'}</span>
             </div>
             {anime.rating && (
               <div className="meta-item">
-                <span className="label">Возраст: </span>
+                <span className="label">Age: </span>
                 <span className="value">{anime.rating}</span>
               </div>
             )}
             {anime.source && (
               <div className="meta-item">
-                <span className="label">Источник: </span>
+                <span className="label">Source: </span>
                 <span className="value">{anime.source}</span>
               </div>
             )}
 
             {/* External Site Ratings as Meta Item */}
             <div className="meta-item" style={{ gridColumn: '1 / -1' }}>
-              <span className="label">Оценки на сайтах:</span>
+              <span className="label">Ratings on Sites:</span>
               <div className="ratings-values">
                 {anime.score && (
                   <a href={anime.url} target="_blank" rel="noopener noreferrer" className="rating-value-link">
@@ -148,7 +148,7 @@ function AnimeDetails() {
           {/* Genres and Themes */}
           {anime.genres && anime.genres.length > 0 && (
             <div className="genres-section">
-              <h3>Жанры</h3>
+              <h3>Genres</h3>
               <div className="genres-grid">
                 {anime.genres.map(g => (
                   <span key={g.mal_id} className="genre-tag">{g.name}</span>
@@ -173,20 +173,20 @@ function AnimeDetails() {
             <button 
               className={`btn btn-favorite ${isFavorite(anime.mal_id) ? 'active' : ''}`}
               onClick={() => toggleFavorite(anime)}
-              title={isFavorite(anime.mal_id) ? 'Убрать из избранного' : 'Добавить в избранное'}
+              title={isFavorite(anime.mal_id) ? 'Remove from favorites' : 'Add to favorites'}
             >
-              {isFavorite(anime.mal_id) ? '❤️ В избранном' : '🤍 Избранное'}
+              {isFavorite(anime.mal_id) ? '❤️ In favorites' : '🤍 Add to favorites'}
             </button>
             <button 
               className={`btn btn-watchlist ${isInWatchlist(anime.mal_id) ? 'active' : ''}`}
               onClick={() => toggleWatchlist(anime)}
-              title={isInWatchlist(anime.mal_id) ? 'Убрать из списка' : 'Добавить в список'}
+              title={isInWatchlist(anime.mal_id) ? 'Remove from watchlist' : 'Add to watchlist'}
             >
-              {isInWatchlist(anime.mal_id) ? '✓ В списке' : '📝 К просмотру'}
+              {isInWatchlist(anime.mal_id) ? '✓ In watchlist' : '📝 Add to watchlist'}
             </button>
             {anime.url && (
-              <a href={anime.url} target="_blank" rel="noopener noreferrer" className="btn btn-external" title="Открыть на MyAnimeList">
-                На MyAnimeList ↗
+              <a href={anime.url} target="_blank" rel="noopener noreferrer" className="btn btn-external" title="Open on MyAnimeList">
+                Open on MyAnimeList ↗
               </a>
             )}
           </div>
@@ -198,7 +198,7 @@ function AnimeDetails() {
         {/* Synopsis */}
         {anime.synopsis && (
           <section className="section">
-            <h2>📖 Описание</h2>
+            <h2>📖 Synopsis</h2>
             <p className="synopsis">{anime.synopsis}</p>
           </section>
         )}
@@ -206,7 +206,7 @@ function AnimeDetails() {
         {/* Background */}
         {anime.background && (
           <section className="section">
-            <h2>🎬 История создания</h2>
+            <h2>🎬 Background</h2>
             <p className="background-text">{anime.background}</p>
           </section>
         )}
@@ -214,7 +214,7 @@ function AnimeDetails() {
         {/* Production Info */}
         {(anime.studios?.length > 0 || anime.producers?.length > 0) && (
           <section className="section">
-            <h2>🏢 Производство</h2>
+            <h2>🏢 Production</h2>
             <div className="production-grid">
               {anime.studios && anime.studios.length > 0 && (
                 <div className="production-item">
@@ -243,26 +243,26 @@ function AnimeDetails() {
         {/* Statistics */}
         {anime.members && (
           <section className="section">
-            <h2>📊 Статистика</h2>
+            <h2>📊 Statistics</h2>
             <div className="stats-grid">
               <div className="stat-card">
                 <div className="stat-icon">👥</div>
-                <div className="stat-label">Членов сообщества</div>
+                <div className="stat-label">Community Members</div>
                 <div className="stat-value">{anime.members?.toLocaleString()}</div>
               </div>
               <div className="stat-card">
                 <div className="stat-icon">⭐</div>
-                <div className="stat-label">Голосов</div>
+                <div className="stat-label">Ratings</div>
                 <div className="stat-value">{anime.scored_by?.toLocaleString()}</div>
               </div>
               <div className="stat-card">
                 <div className="stat-icon">🏆</div>
-                <div className="stat-label">Позиция в топе</div>
+                <div className="stat-label">Top Position</div>
                 <div className="stat-value">#{anime.rank || 'N/A'}</div>
               </div>
               <div className="stat-card">
                 <div className="stat-icon">🔥</div>
-                <div className="stat-label">Популярность</div>
+                <div className="stat-label">Popularity</div>
                 <div className="stat-value">#{anime.popularity || 'N/A'}</div>
               </div>
             </div>
@@ -272,7 +272,7 @@ function AnimeDetails() {
         {/* Characters */}
         {processedData.characters.length > 0 && (
           <section className="section">
-            <h2>👤 Персонажи ({processedData.characters.length})</h2>
+            <h2>👤 Characters ({processedData.characters.length})</h2>
             <div className="characters-grid">
               {processedData.characters.slice(0, 12).map(char => (
                 <div key={char.character.mal_id} className="character-card">
@@ -297,7 +297,7 @@ function AnimeDetails() {
         {/* Recommendations */}
         {processedData.recommendations.length > 0 && (
           <section className="section">
-            <h2>🎯 Рекомендации</h2>
+            <h2>🎯 Recommendations</h2>
             <div className="recommendations-grid">
               {processedData.recommendations.slice(0, 8).map(rec => (
                 <Link 
@@ -324,7 +324,7 @@ function AnimeDetails() {
         {/* Reviews */}
         {processedData.reviews.length > 0 && (
           <section className="section">
-            <h2>💬 Отзывы</h2>
+            <h2>💬 Reviews</h2>
             <div className="reviews">
               {processedData.reviews.slice(0, 5).map(review => (
                 <div key={review.mal_id} className="review-item">

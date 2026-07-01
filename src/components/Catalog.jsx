@@ -34,34 +34,34 @@ function Catalog() {
 
   return (
     <div className="catalog">
-      <h1>Каталог аниме</h1>
+      <h1>Catalog</h1>
 
       <div className="filters">
         <div className="filter-group">
-          <label>Тип</label>
+          <label>Type</label>
           <select value={filters.type} onChange={(e) => handleFilterChange('type', e.target.value)}>
-            <option value="">Все</option>
+            <option value="">All</option>
             <option value="tv">TV</option>
-            <option value="movie">Фильм</option>
+            <option value="movie">Movie</option>
             <option value="ova">OVA</option>
-            <option value="special">Спешл</option>
+            <option value="special">Special</option>
           </select>
         </div>
 
         <div className="filter-group">
-          <label>Статус</label>
+          <label>Status</label>
           <select value={filters.status} onChange={(e) => handleFilterChange('status', e.target.value)}>
-            <option value="">Все</option>
-            <option value="airing">В эфире</option>
-            <option value="complete">Завершено</option>
-            <option value="upcoming">Предстоящее</option>
+            <option value="">All</option>
+            <option value="airing">Airing</option>
+            <option value="complete">Complete</option>
+            <option value="upcoming">Upcoming</option>
           </select>
         </div>
 
         <div className="filter-group">
-          <label>Минимальный рейтинг</label>
+          <label>Minimum Rating</label>
           <select value={filters.min_score} onChange={(e) => handleFilterChange('min_score', e.target.value)}>
-            <option value="">Все</option>
+            <option value="">All</option>
             <option value="6">6.0+</option>
             <option value="7">7.0+</option>
             <option value="8">8.0+</option>
@@ -70,12 +70,12 @@ function Catalog() {
         </div>
       </div>
 
-      {error && <p className="error">Ошибка загрузки: {error}</p>}
+      {error && <p className="error">Error loading anime: {error}</p>}
 
       {loading ? (
-        <p className="loading">Загрузка аниме...</p>
+        <p className="loading">Loading anime...</p>
       ) : anime.length === 0 ? (
-        <p className="no-results">Аниме не найдено</p>
+        <p className="no-results">No anime found</p>
       ) : (
         <>
           <div className="anime-grid">

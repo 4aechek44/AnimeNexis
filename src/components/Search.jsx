@@ -22,12 +22,12 @@ function Search() {
   return (
     <div className="search">
       <div className="search-header">
-        <h1>Поиск аниме</h1>
+        <h1>Search Anime</h1>
         <input
           type="text"
           value={query}
           onChange={handleInputChange}
-          placeholder="Введите название аниме..."
+          placeholder="Enter anime title..."
           className="search-input"
           autoFocus
         />
@@ -35,23 +35,23 @@ function Search() {
 
       {error && (
         <div className="error-message">
-          <p className="error">⚠️ Ошибка: {error}</p>
+          <p className="error">⚠️ Error: {error}</p>
         </div>
       )}
 
-      {loading && <p className="loading">Загрузка результатов...</p>}
+      {loading && <p className="loading">Loading results...</p>}
 
       {!query && !loading && (
-        <p className="search-hint">Введите название аниме для поиска...</p>
+        <p className="search-hint">Enter an anime title to search...</p>
       )}
 
       {query && !loading && results.length === 0 && !error && (
-        <p className="no-results">По запросу "{query}" ничего не найдено</p>
+        <p className="no-results">No results found for "{query}"</p>
       )}
 
       {results.length > 0 && (
         <div>
-          <p className="results-count">Найдено результатов: {results.length}</p>
+          <p className="results-count">Results found: {results.length}</p>
           <div className="anime-grid">
             {results.map((anime) => (
               <AnimeCard key={anime.mal_id} anime={anime} />

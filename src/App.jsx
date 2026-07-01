@@ -15,7 +15,7 @@ const Plans = lazy(() => import('./components/Plans'));
 
 const LoadingFallback = () => (
   <div className="loading-fallback">
-    <p>Загрузка...</p>
+    <p>Loading...</p>
   </div>
 );
 

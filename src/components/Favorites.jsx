@@ -10,16 +10,16 @@ function Favorites() {
   if (favoritesList.length === 0) {
     return (
       <div className="empty-state">
-        <h1>Избранное</h1>
-        <p>У вас нет избранных аниме</p>
-        <p className="subtitle">Добавьте аниме в избранное, нажав на 🤍 на карточке</p>
+        <h1>Favorites</h1>
+        <p>You have no favorite anime</p>
+        <p className="subtitle">Add anime to your favorites by clicking the 🤍 on the card</p>
       </div>
     );
   }
 
   return (
     <div className="favorites">
-      <h1>Избранное ({favoritesList.length})</h1>
+      <h1>Favorites ({favoritesList.length})</h1>
       <div className="anime-grid">
         {favoritesList.map((anime) => (
           <AnimeCard key={anime.mal_id} anime={anime} />

@@ -27,7 +27,7 @@ function Navigation() {
         <form className="search-form" onSubmit={handleSearch}>
           <input
             type="text"
-            placeholder="Найти аниме..."
+            placeholder="Find anime..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -35,10 +35,10 @@ function Navigation() {
         </form>
 
         <div className="navbar-menu">
-          <Link to="/catalog" className="nav-link">Каталог</Link>
-          <Link to="/favorites" className="nav-link">Избранное ({favorites.length})</Link>
-          <Link to="/watchlist" className="nav-link">Просмотренно ({watchlist.length})</Link>
-          <Link to="/plans" className="nav-link">В планах ({plans.length})</Link>
+          <Link to="/catalog" className="nav-link">Catalog</Link>
+          <Link to="/favorites" className="nav-link">Favorites ({favorites.length})</Link>
+          <Link to="/watchlist" className="nav-link">Watched ({watchlist.length})</Link>
+          <Link to="/plans" className="nav-link">Plans ({plans.length})</Link>
         </div>
       </div>
     </nav>

@@ -10,16 +10,16 @@ function Plans() {
   if (plansList.length === 0) {
     return (
       <div className="empty-state">
-        <h1>Планы на аниме</h1>
-        <p>У вас нет планов на аниме</p>
-        <p className="subtitle">Добавьте аниме в планы, нажав на 🕑 на карточке</p>
+        <h1>Plans</h1>
+        <p>You have no plans</p>
+        <p className="subtitle">Add anime to your plans by clicking the 🕑 icon on the card</p>
       </div>
     );
   }
 
   return (
     <div className="plans">
-      <h1>В планах ({plansList.length})</h1>
+      <h1>Plans ({plansList.length})</h1>
       <div className="anime-grid">
         {plansList.map((anime) => (
           <AnimeCard key={anime.mal_id} anime={anime} />

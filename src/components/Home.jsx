@@ -54,13 +54,13 @@ useEffect(() => {
   return (
     <div className="home">
       <div className="hero">
-        <h1>Добро пожаловать в NEXIS</h1>
-        <p>Найди своё любимое аниме</p>
+        <h1>Welcome to NEXIS</h1>
+        <p>Find your favorite anime</p>
       </div>
 
       <section className="section">
         <div className="section-header">
-          <h2>Топ аниме</h2>
+          <h2>Top Anime</h2>
           <div className="filter-buttons">
             {['all', 'tv', 'movie', 'special'].map((type) => (
               <button
@@ -78,7 +78,7 @@ useEffect(() => {
   {topAnimeList.map((anime, index) => (
     <AnimeCard key={`${anime.mal_id}-${index}`} anime={anime} />
   ))}
-  {topLoading && <p className="loading">Загрузка...</p>}
+  {topLoading && <p className="loading">Loading...</p>}
 </div>
 
         <button
@@ -86,17 +86,17 @@ useEffect(() => {
           onClick={() => setTopPage(p => p + 1)}
           disabled={topLoading}
         >
-          {topLoading ? 'Загрузка...' : 'Загрузить ещё'}
+          {topLoading ? 'Loading...' : 'Load More'}
         </button>
       </section>
 
       <section className="section">
-        <h2>Сезонные релизы</h2>
+        <h2>Seasonal Releases</h2>
         <div className="anime-grid">
   {seasonAnimeList.map((anime, index) => (
     <AnimeCard key={`${anime.mal_id}-${index}`} anime={anime} />
   ))}
-  {seasonLoading && <p className="loading">Загрузка...</p>}
+  {seasonLoading && <p className="loading">Loading...</p>}
 </div>
 
         <button
@@ -104,7 +104,7 @@ useEffect(() => {
           onClick={() => setSeasonPage(p => p + 1)}
           disabled={seasonLoading}
         >
-          {seasonLoading ? 'Загрузка...' : 'Загрузить ещё'}
+          {seasonLoading ? 'Loading...' : 'Load More'}
         </button>
       </section>
     </div>

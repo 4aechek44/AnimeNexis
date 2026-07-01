@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function AnimeList({ anime, loading, error }) {
-  if (loading) return <p>Загрузка...</p>;
-  if (error) return <p>Ошибка: {error}</p>;
-  if (!anime || anime.length === 0) return <p>Нет данных</p>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!anime || anime.length === 0) return <p>No data available</p>;
 
   return (
     <div className="anime-list">
